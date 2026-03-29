@@ -225,6 +225,7 @@
       border-top: 1px solid rgba(0,0,0,0.06);
     }
 
+    /* contenido con scroll */
     .letter-content{
       position:absolute;
       inset:0;
@@ -235,6 +236,7 @@
       gap:18px;
       opacity:0;
       transition: opacity 1s ease;
+      overflow:hidden;
     }
 
     .letter-title{
@@ -258,6 +260,24 @@
       color:#222;
       position:relative;
       white-space:pre-line;
+
+      overflow-y:auto;
+      padding-right:8px;
+      max-height: 290px;
+    }
+
+    /* Scroll bonito */
+    .letter-text::-webkit-scrollbar{
+      width:6px;
+    }
+
+    .letter-text::-webkit-scrollbar-thumb{
+      background: rgba(150,150,150,0.35);
+      border-radius:10px;
+    }
+
+    .letter-text::-webkit-scrollbar-track{
+      background: transparent;
     }
 
     /* letras animadas */
@@ -400,6 +420,7 @@
       }
       .letter-text{
         font-size:18px;
+        max-height: 330px;
       }
       .love-heart{
         width:48px;
@@ -478,24 +499,71 @@
 
   let opened = false;
 
-  // TEXTO ORIGINAL (puedes cambiarlo aquí)
+  // TEXTO CORREGIDO
   const letterText = `
-Hola bebé, se lo mucho que te gustan las cartas, pero se que achocas todas en una cajita,
-esata vez estoy haciendo algo especial, no tomé ideas de nada porque me fuans amorcito
-estoy siendo original, quiero inicar disculpándome, creo que estos días, o más bien estas semanas 
-no te he tratado como un pedacito de mi corazón, es decir, no te he cuidado, ni te he hecho sentir amada
-de la forma que tú sientes amor, y quiero disculparme por eso amor mío, no soy perfecto lo sé, estoy muy
-lejos de ser el hombre que muchas veces sueñas, pero intento día con día poder serlo, cometo errores y muchos.
-Pero te agreadezco que llegaste a mi vida y apartir de ese punto todo cambió, mis días son más bonitos,
-encontré mi futuro y mi paz (a veces porque tu dices que no tendremos paz jijijij). Pero quiero que sepas mi amor
-que eres muy importante y valiosa para mi, que te admiro, te respeto y te elijo cada día. y lo haré SIEMPRE.
-No eres un estorbo para mi, no eres menos importante para mi, pero me abrumo y no logro expresarme de la mejor manera.
-También me disculpo por todo eso, sé que no te lo mereces y me das la prueba de amor más grande, que sabiendo como soy
-te quedas a mi lado, me apoyas y me regañas LOL que triste, pero se que es porque vez las cosas de otro punto de vista
-cosas que yo no puedo percibir y te agradezco mi amor, quiero que te quedes a mi lado para siempre, que seamos uno siempre.
-Se que lo que escribo suena lindo pero realmente no quiero que se quede aquí, quiero demostrártelo y que veas ese cambio en mi.
-Y que me sigas elijiendo todos los días.
-Gracias por existir, por ser tú, por quedarte hasta el final mi amor. Eres mi lugar seguro. TE AMO X100000000000^10000000000
+Hola bebé…
+
+Sé lo mucho que te gustan las cartas, y sé que siempre las guardas en una cajita.
+Esta vez quise hacer algo diferente y especial, algo que fuera solo para ti.
+
+No tomé ideas de ningún lado… porque tú eres mi inspiración.
+Quise hacerlo desde cero, con todo mi amor.
+
+Quiero empezar disculpándome.
+Siento que estos días… o más bien estas semanas, no te he tratado como lo que eres:
+un pedacito de mi corazón.
+
+No te he cuidado como mereces, ni te he hecho sentir amada de la manera en la que tú sientes el amor.
+Y lo siento muchísimo, mi vida.
+
+No soy perfecto, lo sé.
+Estoy lejos de ser ese hombre que a veces sueñas…
+pero intento día con día acercarme a serlo.
+Cometo errores, muchos.
+
+Pero te agradezco tanto que hayas llegado a mi vida, porque desde ese momento todo cambió.
+Mis días son más bonitos.
+Encontré mi futuro… y encontré mi paz
+(aunque tú digas que nunca tendremos paz jajaj).
+
+Quiero que sepas, mi amor, que eres muy importante para mí.
+Eres valiosa.
+Te admiro, te respeto y te elijo cada día…
+y lo voy a hacer SIEMPRE.
+
+No eres un estorbo.
+No eres menos importante.
+A veces me abruma todo y no logro expresarme de la mejor manera,
+pero eso no significa que no te ame con todo lo que soy.
+
+También te pido perdón por eso.
+
+Sé que no te lo mereces, y aun así me das la prueba de amor más grande:
+que sabiendo cómo soy, te quedas a mi lado,
+me apoyas…
+y hasta me regañas jajaja.
+
+Pero sé que lo haces porque ves las cosas desde un punto de vista que yo a veces no logro ver,
+y por eso te agradezco tanto.
+
+Quiero que te quedes conmigo para siempre.
+Quiero que seamos uno siempre.
+
+Sé que lo que escribo suena lindo,
+pero no quiero que se quede solo en palabras.
+Quiero demostrártelo,
+quiero que veas el cambio en mí,
+y quiero que me sigas eligiendo todos los días…
+
+porque yo siempre te voy a elegir a ti.
+
+Gracias por existir.
+Gracias por ser tú.
+Gracias por quedarte hasta el final, mi amor.
+
+Eres mi lugar seguro.
+
+TE AMO ♡
 `;
 
   // ===== PARTICULAS =====
@@ -565,10 +633,9 @@ Gracias por existir, por ser tú, por quedarte hasta el final mi amor. Eres mi l
       const span = document.createElement("span");
       span.classList.add("char");
 
-      // si es espacio
       span.textContent = ch === " " ? "\u00A0" : ch;
 
-      span.style.animationDelay = (delay * 0.03) + "s";
+      span.style.animationDelay = (delay * 0.02) + "s";
       letterTextElement.appendChild(span);
 
       delay++;
