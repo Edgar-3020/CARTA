@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Para Fhri 💌</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: "Poppins", system-ui, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(135deg, #f6f0ff, #fef6f7, #f0fbff);
+      overflow:hidden;
+    }
+
+    .container{
+      width:min(420px, 92vw);
+      height:min(520px, 90vh);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      position:relative;
+    }
+
+    /* ===== SOBRE ===== */
+    .envelope{
+      width:100%;
+      height:280px;
+      position:relative;
+      cursor:pointer;
+      transition: transform 0.5s ease;
+      border-radius:18px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      filter: drop-shadow(0px 12px 25px rgba(0,0,0,0.12));
+    }
+
+    .envelope:hover{
+      transform: scale(1.02);
+    }
+
+    .envelope-base{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, #fff6fb, #f0f7ff);
+      border-radius:18px;
+      border:1px solid rgba(255, 182, 193, 0.4);
+      overflow:hidden;
+    }
+
+    .envelope-flap{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:60%;
+      background: linear-gradient(135deg, #ffe5f2, #e8f2ff);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform 1.2s ease;
+      z-index:3;
+      border-top-left-radius:18px;
+      border-top-right-radius:18px;
+    }
+
+    .envelope-front{
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:100%;
+      height:70%;
+      background: linear-gradient(135deg, #fce7f3, #dbeafe);
+      clip-path: polygon(0 100%, 50% 0, 100% 100%, 100% 100%, 0 100%);
+      z-index:4;
+    }
+
+    .envelope-text{
+      position:relative;
+      z-index:5;
+      text-align:center;
+      padding:20px;
+      color:#444;
+      font-weight:600;
+      font-size:16px;
+      line-height:1.5;
+      text-shadow: 0px 1px 4px rgba(0,0,0,0.15);
+    }
+
+    .envelope-text span{
+      display:block;
+      font-weight:500;
+      font-size:14px;
+      margin-top:6px;
+      opacity:0.9;
+    }
+
+    /* ===== CARTA ===== */
+    .letter-wrapper{
+      position:absolute;
+      width:100%;
+      height:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity 0.6s ease;
+      z-index:10;
+    }
+
+    .letter{
+      width:95%;
+      max-width:400px;
+      height:480px;
+      background: #ffffff;
+      border-radius:18px;
+      box-shadow: 0px 14px 40px rgba(0,0,0,0.18);
+      position:relative;
+      overflow:hidden;
+      transform: scale(0.8);
+      transition: transform 0.9s ease;
+      border:1px solid rgba(0,0,0,0.08);
+    }
+
+    /* Simular dobleces */
+    .fold-top{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:33%;
+      background: linear-gradient(180deg, #ffffff, #f8f8f8);
+      transform-origin: top;
+      transform: rotateX(90deg);
+      transition: transform 1.4s ease;
+      z-index:3;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .fold-middle{
+      position:absolute;
+      top:33%;
+      left:0;
+      width:100%;
+      height:34%;
+      background: #ffffff;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      z-index:2;
+    }
+
+    .fold-bottom{
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:100%;
+      height:33%;
+      background: linear-gradient(0deg, #ffffff, #f8f8f8);
+      transform-origin: bottom;
+      transform: rotateX(90deg);
+      transition: transform 1.4s ease;
+      z-index:3;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* Contenido carta */
+    .letter-content{
+      position:absolute;
+      inset:0;
+      padding:35px 25px;
+      z-index:5;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      opacity:0;
+      transition: opacity 1s ease;
+    }
+
+    .letter-title{
+      font-size:22px;
+      font-weight:700;
+      text-align:center;
+
+      background: linear-gradient(90deg, #ff6aa2, #6aa8ff);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+
+      text-shadow: 0px 2px 6px rgba(0,0,0,0.25);
+    }
+
+    .letter-text{
+      font-size:15px;
+      line-height:1.7;
+      color:#222;
+      position:relative;
+
+      /* Barrido */
+      overflow:hidden;
+    }
+
+    .letter-text::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(90deg, #ffffff 0%, #ffffff 60%, rgba(255,255,255,0) 100%);
+      transform: translateX(0%);
+      animation: none;
+    }
+
+    .signature{
+      margin-top:auto;
+      text-align:right;
+      font-weight:700;
+      font-size:16px;
+
+      background: linear-gradient(90deg, #ff7bb4, #7bb6ff);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+
+      text-shadow: 0px 2px 6px rgba(0,0,0,0.22);
+    }
+
+    /* ===== ANIMACIONES ===== */
+    @keyframes sweep {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(120%); }
+    }
+
+    /* ===== ESTADO ABIERTO ===== */
+    .opened .envelope-flap{
+      transform: rotateX(180deg);
+    }
+
+    .opened .letter-wrapper{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .opened .letter{
+      transform: scale(1);
+    }
+
+    .opened .fold-top{
+      transform: rotateX(0deg);
+    }
+
+    .opened .fold-bottom{
+      transform: rotateX(0deg);
+    }
+
+    .opened .letter-content{
+      opacity:1;
+    }
+
+    .opened .letter-text::after{
+      animation: sweep 7s ease forwards;
+    }
+
+    /* ===== FUEGOS ARTIFICIALES ===== */
+    .fireworks-layer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:50;
+      overflow:hidden;
+    }
+
+    .spark{
+      position:absolute;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      opacity:0;
+      animation: explode 1.8s ease forwards;
+      filter: blur(0.4px);
+    }
+
+    @keyframes explode{
+      0%{
+        transform: scale(0.2);
+        opacity:0;
+      }
+      20%{
+        opacity:1;
+        transform: scale(1);
+      }
+      100%{
+        opacity:0;
+        transform: scale(3.5);
+      }
+    }
+
+    .heart{
+      position:absolute;
+      width:60px;
+      height:60px;
+      transform: rotate(45deg);
+      background: rgba(255, 105, 180, 0.9);
+      animation: floatUp 2.8s ease forwards;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-weight:900;
+      font-size:20px;
+      color:white;
+      text-shadow: 0px 2px 6px rgba(0,0,0,0.4);
+      border-radius:12px;
+    }
+
+    .heart::before,
+    .heart::after{
+      content:"";
+      position:absolute;
+      width:60px;
+      height:60px;
+      background: rgba(255, 105, 180, 0.9);
+      border-radius:50%;
+    }
+
+    .heart::before{
+      top:-30px;
+      left:0;
+    }
+
+    .heart::after{
+      left:-30px;
+      top:0;
+    }
+
+    @keyframes floatUp{
+      0%{
+        transform: translateY(30px) rotate(45deg) scale(0.3);
+        opacity:0;
+      }
+      20%{
+        opacity:1;
+        transform: translateY(0px) rotate(45deg) scale(1);
+      }
+      100%{
+        opacity:0;
+        transform: translateY(-120px) rotate(45deg) scale(1.3);
+      }
+    }
+
+    /* Responsive */
+    @media(max-width:420px){
+      .letter{
+        height:520px;
+      }
+      .letter-title{
+        font-size:20px;
+      }
+      .letter-text{
+        font-size:14px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container" id="scene">
+
+    <div class="envelope" id="envelope">
+      <div class="envelope-base"></div>
+      <div class="envelope-flap"></div>
+      <div class="envelope-front"></div>
+
+      <div class="envelope-text">
+        Para: <b>Fhri</b>, el amor de mi vida 💖
+        <span>De: <b>ichi</b></span>
+        <span style="margin-top:12px; font-size:13px; opacity:0.75;">
+          (Click para abrir)
+        </span>
+      </div>
+    </div>
+
+    <div class="letter-wrapper" id="letterWrapper">
+      <div class="letter">
+
+        <div class="fold-top"></div>
+        <div class="fold-middle"></div>
+        <div class="fold-bottom"></div>
+
+        <div class="letter-content">
+          <div class="letter-title">Mi amor 💌</div>
+
+          <div class="letter-text" id="letterText">
+            <!-- AQUÍ VA TU TEXTO -->
+            Esta carta es un pedacito de mi corazón hecho palabras.
+            <br><br>
+            Desde que llegaste a mi vida, todo cambió: los días son más bonitos,
+            las noches más tranquilas y el futuro tiene sentido.
+            <br><br>
+            Quiero que sepas que te admiro, te respeto y te elijo cada día.
+            Gracias por existir, por ser tú, por quedarte.
+            <br><br>
+            Eres mi lugar seguro.
+          </div>
+
+          <div class="signature">
+            Con amor,<br>
+            ichi 💙💗
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="fireworks-layer" id="fireworksLayer"></div>
+
+  </div>
+
+<script>
+  const scene = document.getElementById("scene");
+  const envelope = document.getElementById("envelope");
+  const fireworksLayer = document.getElementById("fireworksLayer");
+
+  let opened = false;
+
+  envelope.addEventListener("click", () => {
+    if(opened) return;
+    opened = true;
+
+    scene.classList.add("opened");
+
+    // Esperar 10 segundos para fuegos artificiales
+    setTimeout(() => {
+      startFireworksWithHearts("TE AMO");
+    }, 10000);
+  });
+
+  function randomBetween(min, max){
+    return Math.random() * (max - min) + min;
+  }
+
+  function createSpark(x, y){
+    const spark = document.createElement("div");
+    spark.classList.add("spark");
+
+    spark.style.left = x + "px";
+    spark.style.top = y + "px";
+
+    // colores pastel random
+    const colors = ["#ff9acb", "#9acbff", "#b5ffcc", "#fff0a6", "#d7b3ff"];
+    spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    fireworksLayer.appendChild(spark);
+
+    setTimeout(() => spark.remove(), 1800);
+  }
+
+  function createHeart(x, y, letter){
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.style.left = (x - 30) + "px";
+    heart.style.top = (y - 30) + "px";
+    heart.textContent = letter;
+
+    // variación de colores
+    const heartColors = [
+      "rgba(255,105,180,0.92)",
+      "rgba(135,206,250,0.92)",
+      "rgba(186,85,211,0.92)",
+      "rgba(255,182,193,0.92)"
+    ];
+    const c = heartColors[Math.floor(Math.random() * heartColors.length)];
+    heart.style.background = c;
+
+    heart.style.setProperty("--c", c);
+
+    fireworksLayer.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 2800);
+  }
+
+  function fireworkExplosion(letter){
+    const x = randomBetween(80, window.innerWidth - 80);
+    const y = randomBetween(120, window.innerHeight - 200);
+
+    // sparks
+    for(let i=0; i<12; i++){
+      createSpark(x + randomBetween(-25, 25), y + randomBetween(-25, 25));
+    }
+
+    // heart con letra
+    createHeart(x, y, letter);
+  }
+
+  function startFireworksWithHearts(word){
+    const letters = word.replaceAll(" ", "").split("");
+    let delay = 0;
+
+    letters.forEach((letter) => {
+      setTimeout(() => {
+        fireworkExplosion(letter);
+      }, delay);
+
+      delay += 1100;
+    });
+
+    // Extra fuegos finales
+    setTimeout(() => {
+      for(let i=0; i<5; i++){
+        setTimeout(() => {
+          fireworkExplosion("💖");
+        }, i * 400);
+      }
+    }, delay + 500);
+  }
+</script>
+
+</body>
+</html>
