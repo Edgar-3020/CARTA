@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Para Fhri 💌</title>
 
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
     *{
       margin:0;
@@ -22,6 +27,39 @@
       overflow:hidden;
     }
 
+    /* ===== PARTÍCULAS FLOTANTES ===== */
+    .particles{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      overflow:hidden;
+    }
+
+    .particle{
+      position:absolute;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      opacity:0.35;
+      filter: blur(0.3px);
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp{
+      0%{
+        transform: translateY(120vh) scale(0.6);
+        opacity:0;
+      }
+      15%{
+        opacity:0.35;
+      }
+      100%{
+        transform: translateY(-30vh) scale(1.1);
+        opacity:0;
+      }
+    }
+
     .container{
       width:min(420px, 92vw);
       height:min(520px, 90vh);
@@ -29,6 +67,7 @@
       justify-content:center;
       align-items:center;
       position:relative;
+      z-index:2;
     }
 
     /* ===== SOBRE ===== */
@@ -43,6 +82,20 @@
       justify-content:center;
       align-items:center;
       filter: drop-shadow(0px 12px 25px rgba(0,0,0,0.12));
+    }
+
+    .shake{
+      animation: shake 0.55s ease;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0px) rotate(0deg); }
+      15% { transform: translateX(-6px) rotate(-1deg); }
+      30% { transform: translateX(6px) rotate(1deg); }
+      45% { transform: translateX(-5px) rotate(-1deg); }
+      60% { transform: translateX(5px) rotate(1deg); }
+      75% { transform: translateX(-3px) rotate(-0.5deg); }
+      100% { transform: translateX(0px) rotate(0deg); }
     }
 
     .envelope:hover{
@@ -132,7 +185,6 @@
       border:1px solid rgba(0,0,0,0.08);
     }
 
-    /* Simular dobleces */
     .fold-top{
       position:absolute;
       top:0;
@@ -173,7 +225,6 @@
       border-top: 1px solid rgba(0,0,0,0.06);
     }
 
-    /* Contenido carta */
     .letter-content{
       position:absolute;
       inset:0;
@@ -187,9 +238,10 @@
     }
 
     .letter-title{
-      font-size:22px;
+      font-size:34px;
       font-weight:700;
       text-align:center;
+      font-family: "Dancing Script", cursive;
 
       background: linear-gradient(90deg, #ff6aa2, #6aa8ff);
       -webkit-background-clip:text;
@@ -199,29 +251,36 @@
     }
 
     .letter-text{
-      font-size:15px;
+      font-size:20px;
       line-height:1.7;
+      font-family: "Dancing Script", cursive;
+      font-weight:600;
       color:#222;
       position:relative;
-
-      /* Barrido */
-      overflow:hidden;
+      white-space:pre-line;
     }
 
-    .letter-text::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background: linear-gradient(90deg, #ffffff 0%, #ffffff 60%, rgba(255,255,255,0) 100%);
-      transform: translateX(0%);
-      animation: none;
+    /* letras animadas */
+    .char{
+      display:inline-block;
+      opacity:0;
+      transform: translateX(18px);
+      animation: charIn 0.35s ease forwards;
+    }
+
+    @keyframes charIn{
+      to{
+        opacity:1;
+        transform: translateX(0px);
+      }
     }
 
     .signature{
       margin-top:auto;
       text-align:right;
       font-weight:700;
-      font-size:16px;
+      font-size:22px;
+      font-family: "Dancing Script", cursive;
 
       background: linear-gradient(90deg, #ff7bb4, #7bb6ff);
       -webkit-background-clip:text;
@@ -230,13 +289,7 @@
       text-shadow: 0px 2px 6px rgba(0,0,0,0.22);
     }
 
-    /* ===== ANIMACIONES ===== */
-    @keyframes sweep {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(120%); }
-    }
-
-    /* ===== ESTADO ABIERTO ===== */
+    /* ===== ABIERTO ===== */
     .opened .envelope-flap{
       transform: rotateX(180deg);
     }
@@ -262,113 +315,118 @@
       opacity:1;
     }
 
-    .opened .letter-text::after{
-      animation: sweep 7s ease forwards;
-    }
-
-    /* ===== FUEGOS ARTIFICIALES ===== */
-    .fireworks-layer{
+    /* ===== CORAZONES TE AMO ===== */
+    .love-banner{
       position:absolute;
-      inset:0;
+      top:-35px;
+      left:50%;
+      transform: translateX(-50%);
+      display:flex;
+      gap:12px;
+      z-index:99;
       pointer-events:none;
-      z-index:50;
-      overflow:hidden;
-    }
-
-    .spark{
-      position:absolute;
-      width:12px;
-      height:12px;
-      border-radius:50%;
       opacity:0;
-      animation: explode 1.8s ease forwards;
-      filter: blur(0.4px);
+      transition: opacity 1s ease;
     }
 
-    @keyframes explode{
-      0%{
-        transform: scale(0.2);
-        opacity:0;
-      }
-      20%{
-        opacity:1;
-        transform: scale(1);
-      }
-      100%{
-        opacity:0;
-        transform: scale(3.5);
-      }
+    .love-banner.show{
+      opacity:1;
     }
 
-    .heart{
-      position:absolute;
-      width:60px;
-      height:60px;
-      transform: rotate(45deg);
+    .love-heart{
+      width:58px;
+      height:58px;
       background: rgba(255, 105, 180, 0.9);
-      animation: floatUp 2.8s ease forwards;
+      transform: rotate(45deg);
+      border-radius:12px;
       display:flex;
       justify-content:center;
       align-items:center;
-      font-weight:900;
-      font-size:20px;
-      color:white;
-      text-shadow: 0px 2px 6px rgba(0,0,0,0.4);
-      border-radius:12px;
+      position:relative;
+      box-shadow: 0px 10px 20px rgba(0,0,0,0.15);
+      animation: popIn 0.6s ease forwards;
     }
 
-    .heart::before,
-    .heart::after{
+    .love-heart::before,
+    .love-heart::after{
       content:"";
       position:absolute;
-      width:60px;
-      height:60px;
-      background: rgba(255, 105, 180, 0.9);
+      width:58px;
+      height:58px;
+      background: inherit;
       border-radius:50%;
     }
 
-    .heart::before{
-      top:-30px;
+    .love-heart::before{
+      top:-29px;
       left:0;
     }
 
-    .heart::after{
-      left:-30px;
+    .love-heart::after{
+      left:-29px;
       top:0;
     }
 
-    @keyframes floatUp{
+    .love-letter{
+      transform: rotate(-45deg);
+      font-weight:900;
+      font-size:22px;
+      color:white;
+      text-shadow: 0px 2px 6px rgba(0,0,0,0.35);
+      font-family: "Poppins", sans-serif;
+    }
+
+    @keyframes popIn{
       0%{
-        transform: translateY(30px) rotate(45deg) scale(0.3);
+        transform: rotate(45deg) scale(0.2);
         opacity:0;
       }
-      20%{
+      70%{
+        transform: rotate(45deg) scale(1.12);
         opacity:1;
-        transform: translateY(0px) rotate(45deg) scale(1);
       }
       100%{
-        opacity:0;
-        transform: translateY(-120px) rotate(45deg) scale(1.3);
+        transform: rotate(45deg) scale(1);
+        opacity:1;
       }
     }
 
-    /* Responsive */
     @media(max-width:420px){
       .letter{
         height:520px;
       }
       .letter-title{
-        font-size:20px;
+        font-size:30px;
       }
       .letter-text{
-        font-size:14px;
+        font-size:18px;
+      }
+      .love-heart{
+        width:48px;
+        height:48px;
+      }
+      .love-heart::before,
+      .love-heart::after{
+        width:48px;
+        height:48px;
+      }
+      .love-heart::before{
+        top:-24px;
+      }
+      .love-heart::after{
+        left:-24px;
+      }
+      .love-letter{
+        font-size:18px;
       }
     }
-
   </style>
 </head>
 
 <body>
+
+  <!-- partículas -->
+  <div class="particles" id="particles"></div>
 
   <div class="container" id="scene">
 
@@ -386,28 +444,19 @@
       </div>
     </div>
 
-    <div class="letter-wrapper" id="letterWrapper">
-      <div class="letter">
+    <div class="letter-wrapper">
+      <div class="letter" id="letterCard">
+
+        <div class="love-banner" id="loveBanner"></div>
 
         <div class="fold-top"></div>
         <div class="fold-middle"></div>
         <div class="fold-bottom"></div>
 
         <div class="letter-content">
-          <div class="letter-title">Mi amor 💌</div>
+          <div class="letter-title">Mi amor</div>
 
-          <div class="letter-text" id="letterText">
-            <!-- AQUÍ VA TU TEXTO -->
-            Esta carta es un pedacito de mi corazón hecho palabras.
-            <br><br>
-            Desde que llegaste a mi vida, todo cambió: los días son más bonitos,
-            las noches más tranquilas y el futuro tiene sentido.
-            <br><br>
-            Quiero que sepas que te admiro, te respeto y te elijo cada día.
-            Gracias por existir, por ser tú, por quedarte.
-            <br><br>
-            Eres mi lugar seguro.
-          </div>
+          <div class="letter-text" id="letterText"></div>
 
           <div class="signature">
             Con amor,<br>
@@ -418,106 +467,154 @@
       </div>
     </div>
 
-    <div class="fireworks-layer" id="fireworksLayer"></div>
-
   </div>
 
 <script>
   const scene = document.getElementById("scene");
   const envelope = document.getElementById("envelope");
-  const fireworksLayer = document.getElementById("fireworksLayer");
+  const loveBanner = document.getElementById("loveBanner");
+  const letterTextElement = document.getElementById("letterText");
+  const particlesContainer = document.getElementById("particles");
 
   let opened = false;
+
+  // TEXTO ORIGINAL (puedes cambiarlo aquí)
+  const letterText = `
+Hola bebé, se lo mucho que te gustan las cartas, pero se que achocas todas en una cajita,
+esata vez estoy haciendo algo especial, no tomé ideas de nada porque me fuans amorcito
+estoy siendo original, quiero inicar disculpándome, creo que estos días, o más bien estas semanas 
+no te he tratado como un pedacito de mi corazón, es decir, no te he cuidado, ni te he hecho sentir amada
+de la forma que tú sientes amor, y quiero disculparme por eso amor mío, no soy perfecto lo sé, estoy muy
+lejos de ser el hombre que muchas veces sueñas, pero intento día con día poder serlo, cometo errores y muchos.
+Pero te agreadezco que llegaste a mi vida y apartir de ese punto todo cambió, mis días son más bonitos,
+encontré mi futuro y mi paz (a veces porque tu dices que no tendremos paz jijijij). Pero quiero que sepas mi amor
+que eres muy importante y valiosa para mi, que te admiro, te respeto y te elijo cada día. y lo haré SIEMPRE.
+No eres un estorbo para mi, no eres menos importante para mi, pero me abrumo y no logro expresarme de la mejor manera.
+También me disculpo por todo eso, sé que no te lo mereces y me das la prueba de amor más grande, que sabiendo como soy
+te quedas a mi lado, me apoyas y me regañas LOL que triste, pero se que es porque vez las cosas de otro punto de vista
+cosas que yo no puedo percibir y te agradezco mi amor, quiero que te quedes a mi lado para siempre, que seamos uno siempre.
+Se que lo que escribo suena lindo pero realmente no quiero que se quede aquí, quiero demostrártelo y que veas ese cambio en mi.
+Y que me sigas elijiendo todos los días.
+Gracias por existir, por ser tú, por quedarte hasta el final mi amor. Eres mi lugar seguro. TE AMO X100000000000^10000000000
+`;
+
+  // ===== PARTICULAS =====
+  function createParticles(){
+    const colors = ["#ff9acb", "#9acbff", "#d7b3ff", "#fff0a6", "#b5ffcc"];
+
+    for(let i=0; i<26; i++){
+      const p = document.createElement("div");
+      p.classList.add("particle");
+
+      const size = Math.random() * 10 + 6;
+      p.style.width = size + "px";
+      p.style.height = size + "px";
+
+      p.style.left = Math.random() * 100 + "%";
+      p.style.animationDuration = (Math.random() * 10 + 10) + "s";
+      p.style.animationDelay = (Math.random() * 8) + "s";
+
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+      particlesContainer.appendChild(p);
+    }
+  }
+
+  createParticles();
+
+  // ===== SACUDIDA AUTOMATICA =====
+  const shakeInterval = setInterval(() => {
+    if(opened) return;
+    envelope.classList.add("shake");
+    setTimeout(() => envelope.classList.remove("shake"), 600);
+  }, 4500);
 
   envelope.addEventListener("click", () => {
     if(opened) return;
     opened = true;
 
+    clearInterval(shakeInterval);
+
     scene.classList.add("opened");
 
-    // Esperar 10 segundos para fuegos artificiales
+    // Iniciar animación del texto letra por letra
     setTimeout(() => {
-      startFireworksWithHearts("TE AMO");
-    }, 10000);
+      animateText(letterText);
+    }, 1300);
+
+    // A los 5 segundos mostrar TE AMO
+    setTimeout(() => {
+      showLoveWord("TE AMO");
+    }, 5000);
   });
 
-  function randomBetween(min, max){
-    return Math.random() * (max - min) + min;
-  }
-
-  function createSpark(x, y){
-    const spark = document.createElement("div");
-    spark.classList.add("spark");
-
-    spark.style.left = x + "px";
-    spark.style.top = y + "px";
-
-    // colores pastel random
-    const colors = ["#ff9acb", "#9acbff", "#b5ffcc", "#fff0a6", "#d7b3ff"];
-    spark.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-    fireworksLayer.appendChild(spark);
-
-    setTimeout(() => spark.remove(), 1800);
-  }
-
-  function createHeart(x, y, letter){
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.style.left = (x - 30) + "px";
-    heart.style.top = (y - 30) + "px";
-    heart.textContent = letter;
-
-    // variación de colores
-    const heartColors = [
-      "rgba(255,105,180,0.92)",
-      "rgba(135,206,250,0.92)",
-      "rgba(186,85,211,0.92)",
-      "rgba(255,182,193,0.92)"
-    ];
-    const c = heartColors[Math.floor(Math.random() * heartColors.length)];
-    heart.style.background = c;
-
-    heart.style.setProperty("--c", c);
-
-    fireworksLayer.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 2800);
-  }
-
-  function fireworkExplosion(letter){
-    const x = randomBetween(80, window.innerWidth - 80);
-    const y = randomBetween(120, window.innerHeight - 200);
-
-    // sparks
-    for(let i=0; i<12; i++){
-      createSpark(x + randomBetween(-25, 25), y + randomBetween(-25, 25));
-    }
-
-    // heart con letra
-    createHeart(x, y, letter);
-  }
-
-  function startFireworksWithHearts(word){
-    const letters = word.replaceAll(" ", "").split("");
+  // ===== ANIMACION LETRA POR LETRA =====
+  function animateText(text){
+    letterTextElement.innerHTML = "";
     let delay = 0;
 
-    letters.forEach((letter) => {
+    for(let i=0; i<text.length; i++){
+      const ch = text[i];
+
+      if(ch === "\n"){
+        const br = document.createElement("br");
+        letterTextElement.appendChild(br);
+        continue;
+      }
+
+      const span = document.createElement("span");
+      span.classList.add("char");
+
+      // si es espacio
+      span.textContent = ch === " " ? "\u00A0" : ch;
+
+      span.style.animationDelay = (delay * 0.03) + "s";
+      letterTextElement.appendChild(span);
+
+      delay++;
+    }
+  }
+
+  // ===== TE AMO EN CORAZONES =====
+  function showLoveWord(word){
+    loveBanner.innerHTML = "";
+    const letters = word.split("");
+    let delay = 0;
+
+    letters.forEach((char) => {
       setTimeout(() => {
-        fireworkExplosion(letter);
+        if(char === " "){
+          const spacer = document.createElement("div");
+          spacer.style.width = "22px";
+          loveBanner.appendChild(spacer);
+          return;
+        }
+
+        const heart = document.createElement("div");
+        heart.classList.add("love-heart");
+
+        const heartColors = [
+          "rgba(255,105,180,0.92)",
+          "rgba(135,206,250,0.92)",
+          "rgba(186,85,211,0.92)",
+          "rgba(255,182,193,0.92)"
+        ];
+
+        heart.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
+
+        const letter = document.createElement("div");
+        letter.classList.add("love-letter");
+        letter.textContent = char;
+
+        heart.appendChild(letter);
+        loveBanner.appendChild(heart);
+
       }, delay);
 
-      delay += 1100;
+      delay += 500;
     });
 
-    // Extra fuegos finales
-    setTimeout(() => {
-      for(let i=0; i<5; i++){
-        setTimeout(() => {
-          fireworkExplosion("💖");
-        }, i * 400);
-      }
-    }, delay + 500);
+    loveBanner.classList.add("show");
   }
 </script>
 
